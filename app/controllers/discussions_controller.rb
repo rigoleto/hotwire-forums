@@ -20,6 +20,28 @@ class DiscussionsController < ApplicationController
     end
   end
 
+  def edit
+    @discussion = Discussion.find params[:id]
+  end
+
+  def update
+    @discussion = Discussion.find params[:id]
+    @discussion.assign_attributes discussion_params
+    respond_to do |format|
+      if @discussion.save
+        format.html { redirect_to discussions_path, notice: "Discussion updated" }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @discussion = Discussion.find params[:id]
+    @discussion.destroy!
+    redirect_to discussions_path, notice: "Discussion removed"
+  end
+
   private
 
   def discussion_params
