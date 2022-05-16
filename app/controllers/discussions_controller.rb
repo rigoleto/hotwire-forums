@@ -5,6 +5,10 @@ class DiscussionsController < ApplicationController
     @discussions = Discussion.all
   end
 
+  def show
+    @discussion = Discussion.find params[:id]
+  end
+
   def new
     @discussion = Discussion.new
   end
@@ -13,7 +17,7 @@ class DiscussionsController < ApplicationController
     @discussion = Discussion.new(discussion_params.merge(user: Current.user))
     respond_to do |format|
       if @discussion.save
-        format.html { redirect_to discussions_path, notice: "Discussion created" }
+        format.html { redirect_to @discussion, notice: "Discussion created" }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -29,7 +33,7 @@ class DiscussionsController < ApplicationController
     @discussion.assign_attributes discussion_params
     respond_to do |format|
       if @discussion.save
-        format.html { redirect_to discussions_path, notice: "Discussion updated" }
+        format.html { redirect_to @discussion, notice: "Discussion updated" }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
