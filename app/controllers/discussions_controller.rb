@@ -1,12 +1,13 @@
 class DiscussionsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_discussion, only: [:show, :edit, :update, :destroy]
 
   def index
-    @discussions = Discussion.all.order(updated_at: :desc)
+    @discussions = Discussion.all.with_posts_count.order(updated_at: :desc)
   end
 
   def show
-    @discussion = Discussion.find params[:id]
+    @new_post = @discussion.posts.new
   end
 
   def new
@@ -26,11 +27,10 @@ class DiscussionsController < ApplicationController
   end
 
   def edit
-    @discussion = Discussion.find params[:id]
+
   end
 
   def update
-    @discussion = Discussion.find params[:id]
     respond_to do |format|
       if @discussion.update(discussion_params)
         @discussion.broadcast_replace_to("discussions")
@@ -42,7 +42,6 @@ class DiscussionsController < ApplicationController
   end
 
   def destroy
-    @discussion = Discussion.find params[:id]
     @discussion.destroy!
     @discussion.broadcast_remove_to("discussions")
     redirect_to discussions_path, notice: "Discussion removed"
@@ -52,5 +51,9 @@ class DiscussionsController < ApplicationController
 
   def discussion_params
     params.require(:discussion).permit(:name, :pinned, :closed)
+  end
+
+  def set_discussion
+    @discussion = Discussion.find params[:id]
   end
 end
