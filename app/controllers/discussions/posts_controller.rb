@@ -6,6 +6,7 @@ class Discussions::PostsController < ApplicationController
   def create
     respond_to do |format|
       if @post.update(post_params)
+        @post.broadcast_append_to @discussion, partial: "discussions/posts/post", locals: { post: @post }
         format.html { redirect_to discussion_path(@discussion), notice: "Post created" }
       else
         format.turbo_stream {  }
