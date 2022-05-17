@@ -7,6 +7,7 @@ class DiscussionsController < ApplicationController
   end
 
   def show
+    @posts = @discussion.posts.order(:created_at)
     @new_post = @discussion.posts.new
   end
 
