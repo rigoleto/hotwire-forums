@@ -12,7 +12,7 @@ class DiscussionsController < ApplicationController
   end
 
   def new
-
+    @categories = Category.all.sorted
   end
 
   def create
@@ -55,7 +55,7 @@ class DiscussionsController < ApplicationController
   private
 
   def discussion_params
-    params.require(:discussion).permit(:name, :pinned, :closed)
+    params.require(:discussion).permit(:name, :category_id, :pinned, :closed, post_attributes: :body)
   end
 
   def set_discussion

@@ -1,5 +1,6 @@
 class Discussion < ApplicationRecord
   belongs_to :user
+  belongs_to :category, touch: true, optional: true
   has_many :posts, dependent: :destroy
 
   validates :name, presence: true
