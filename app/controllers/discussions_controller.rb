@@ -52,6 +52,11 @@ class DiscussionsController < ApplicationController
           new_category.broadcast_replace_to "categories"
         end
         @discussion.broadcast_replace_to("discussions")
+        @discussion.broadcast_replace_to @discussion
+        @discussion.broadcast_replace_to @discussion,
+          target: "new_post_form",
+          partial: "discussions/posts/form",
+          locals: { post: @discussion.posts.new }
         format.html do
           redirect_to @discussion, notice: "Discussion updated"
         end
