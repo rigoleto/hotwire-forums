@@ -1,4 +1,8 @@
-<%= turbo_stream_from "discussions" %>
+<% if @category.present? %>
+  <%= turbo_stream_from @category %>
+<% else %>
+  <%= turbo_stream_from "discussions" %>
+<% end %>
 
 <div class="d-flex justify-content-between align-items-center">
   <h1>Discussions</h1>
@@ -8,14 +12,17 @@
 <div class="row mt-4">
   <div class="col-3">
     <%= turbo_stream_from "categories" %>
-    <h5>Categories</h5>
-    <div id="categories">
+    <h5 class="pb-2 border-bottom">Categories</h5>
+    <div id="categories" class="mt-3">
       <%= render partial: "categories/category", collection: @categories %>
     </div>
   </div>
   <div class="col">
+    <% if @category %>
+      <h4>Viewing discussions in <%= @category.name %></h4>
+    <% end %>
     <div id="discussions">
-      <%= render @discussions %>
+      <%= render partial: "discussions/discussion", collection: @discussions %>
     </div>
   </div>
 </div>

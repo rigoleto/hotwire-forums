@@ -3,7 +3,7 @@ class Discussion < ApplicationRecord
   belongs_to :category, touch: true, optional: true
   has_many :posts, dependent: :destroy
 
-  accepts_nested_attributes_for :posts
+  accepts_nested_attributes_for :posts, reject_if: proc {|attrs| attrs[:body].blank? }
 
   validates :name, presence: true
 

@@ -10,4 +10,8 @@ class Category < ApplicationRecord
     has_attribute?(:discussions_count) ? self[:discussions_count] : discussions.count
   end
 
+  def to_param
+    "#{id}-#{name.downcase}"[0..100].parameterize
+  end
+
 end

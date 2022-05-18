@@ -21,6 +21,10 @@ class DiscussionsController < ApplicationController
     respond_to do |format|
       if @discussion.save
         @discussion.broadcast_prepend_to("discussions")
+        if @discussion.category_id
+          @discussion.broadcast_prepend_to(@discussion.category)
+          @discussion.category.broadcast_replace_to "categories"
+        end
         format.html do
           redirect_to @discussion, notice: "Discussion created"
         end
@@ -37,6 +41,16 @@ class DiscussionsController < ApplicationController
   def update
     respond_to do |format|
       if @discussion.update(discussion_params)
+        if @discussion.saved_change_to_category_id?
+          old_category_id, new_category_id = @discussion.saved_change_to_category_id
+          old_category = Category.find old_category_id
+          new_category = Category.find new_category_id
+
+          @discussion.broadcast_remove_to old_category
+          @discussion.broadcast_prepend_to new_category
+          old_category.broadcast_replace_to "categories"
+          new_category.broadcast_replace_to "categories"
+        end
         @discussion.broadcast_replace_to("discussions")
         format.html do
           redirect_to @discussion, notice: "Discussion updated"
@@ -48,7 +62,12 @@ class DiscussionsController < ApplicationController
   end
 
   def destroy
+    category = @discussion.category
     @discussion.destroy!
+    if category
+      @discussion.broadcast_remove_to(category)
+      category.broadcast_replace_to "categories"
+    end
     @discussion.broadcast_remove_to("discussions")
     redirect_to discussions_path, notice: "Discussion removed"
   end
