@@ -8,7 +8,7 @@ class DiscussionsController < ApplicationController
   end
 
   def show
-    @posts = @discussion.posts.order(:created_at)
+    @posts = @discussion.posts.order(:created_at).includes(:user, :rich_text_body)
     @new_post = @discussion.posts.new
   end
 
