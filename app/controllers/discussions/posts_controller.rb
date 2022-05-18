@@ -11,7 +11,9 @@ class Discussions::PostsController < ApplicationController
     respond_to do |format|
       if @post.update(post_params)
         @post.broadcast_append_to @discussion, partial: "discussions/posts/post", locals: { post: @post }
-        format.html { redirect_to discussion_path(@discussion), notice: "Post created" }
+        format.html do
+          redirect_to discussion_path(@discussion), notice: "Post created"
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -35,12 +37,18 @@ class Discussions::PostsController < ApplicationController
   def destroy
     respond_to do |format|
       if @post.destroy
-        @post.broadcast_remove_to @post
-        format.html { redirect_to discussion_post_path(@discussion, @post), notice: "Post updated" }
+        @post.broadcast_remove_to @discussion
+        format.html do
+          redirect_to discussion_path(@discussion), notice: "Post deleted"
+        end
+        format.turbo_stream do
+          head :no_content
+        end
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { redirect_to discussion_path(@discussion), error: "Could not delete post" }
       end
     end
+    @post.destroy!
   end
 
   private
