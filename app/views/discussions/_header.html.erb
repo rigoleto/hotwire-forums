@@ -3,12 +3,11 @@
     <div>
       <h1><%= discussion.name %></h1>
       <span class="text-muted fs-6">
-        <% if discussion.pinned %>
-          <span class="badge rounded-pill bg-info">Pinned</span>
+        <% if discussion.pinned? %>
+          <i class="bi bi-pin-fill"></i> Pinned
         <% end %>
-
-        <% if discussion.closed %>
-          <span class="badge rounded-pill text-danger">Closed</span>
+        <% if discussion.closed? %>
+          <i class="bi bi-door-closed-fill"></i> Closed
         <% end %>
       </span>
     </div>

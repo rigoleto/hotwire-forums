@@ -1,7 +1,14 @@
 <div id="<%= dom_id(discussion) %>" class="mb-2">
   <h2><%= link_to discussion.name, discussion %></h2>
-  Pinned: <%= discussion.pinned %> | Closed: <%= discussion.closed %>
-  <br>
+  <% if discussion.pinned? %>
+    <i class="bi bi-pin-fill"></i> Pinned
+  <% end %>
+  <% if discussion.closed? %>
+    <i class="bi bi-door-closed-fill"></i> Closed
+  <% end %>
+  <% if discussion.pinned? || discussion.closed? %>
+    <br>
+  <% end %>
   Posted in: <%= discussion.category&.name || "No category" %> | Posts: <%= discussion.posts_count %>
   <div>
     <%= link_to "Edit", edit_discussion_path(discussion) %> |

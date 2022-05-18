@@ -3,8 +3,8 @@ class Categories::DiscussionsController < ApplicationController
 
   def index
     @category = Category.find params[:id]
-    @discussions = @category.discussions.order(updated_at: :desc)
-    @categories = Category.all.sorted.with_discussions_count
+    @discussions = @category.discussions.ordered
+    @categories = Category.all.ordered.with_discussions_count
     render "discussions/index"
   end
 

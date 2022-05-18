@@ -3,7 +3,7 @@ class Category < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :sorted, -> { order(:name) }
+  scope :ordered, -> { order(:name) }
   scope :with_discussions_count, ->{ select("*, (#{Discussion.where('category_id = categories.id').select('COUNT(*)').to_sql}) AS discussions_count") }
 
   def discussions_count

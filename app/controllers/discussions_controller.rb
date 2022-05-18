@@ -4,7 +4,7 @@ class DiscussionsController < ApplicationController
   before_action :set_categories
 
   def index
-    @discussions = Discussion.all.with_posts_count.order(updated_at: :desc).includes(:category)
+    @discussions = Discussion.all.with_posts_count.ordered.includes(:category)
   end
 
   def show
@@ -92,6 +92,6 @@ class DiscussionsController < ApplicationController
   end
 
   def set_categories
-    @categories = Category.all.sorted.with_discussions_count
+    @categories = Category.all.ordered.with_discussions_count
   end
 end

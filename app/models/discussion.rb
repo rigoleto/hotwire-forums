@@ -7,7 +7,8 @@ class Discussion < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :with_posts_count, ->{ select("*, (#{Post.where('discussion_id = posts.discussion_id').select('COUNT(*)').to_sql}) AS posts_count") }
+  scope :ordered, -> { order(pinned: :desc).order(updated_at: :desc) }
+  scope :with_posts_count, -> { select("*, (#{Post.where('discussion_id = posts.discussion_id').select('COUNT(*)').to_sql}) AS posts_count") }
 
   def posts_count
     has_attribute?(:posts_count) ? self[:posts_count] : posts.count
