@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "#{dom_id(post)}_form", target: :_top do %>
+<%= turbo_frame_tag "#{dom_id(post)}_form", target: dom_id(post) do %>
   <%= form_with(model: [post.discussion, post]) do |form| %>
     <% if post.errors.any? %>
       <div id="error-explanation">

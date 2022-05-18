@@ -1,6 +1,6 @@
 class DiscussionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_discussion, only: [:show, :edit, :update, :destroy]
+  before_action :set_discussion, except: :index
 
   def index
     @discussions = Discussion.all.with_posts_count.order(updated_at: :desc)
@@ -12,7 +12,7 @@ class DiscussionsController < ApplicationController
   end
 
   def new
-    @discussion = Discussion.new
+
   end
 
   def create
@@ -20,7 +20,9 @@ class DiscussionsController < ApplicationController
     respond_to do |format|
       if @discussion.save
         @discussion.broadcast_prepend_to("discussions")
-        format.html { redirect_to @discussion, notice: "Discussion created" }
+        format.html do
+          redirect_to @discussion, notice: "Discussion created"
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -35,7 +37,9 @@ class DiscussionsController < ApplicationController
     respond_to do |format|
       if @discussion.update(discussion_params)
         @discussion.broadcast_replace_to("discussions")
-        format.html { redirect_to @discussion, notice: "Discussion updated" }
+        format.html do
+          redirect_to @discussion, notice: "Discussion updated"
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -55,6 +59,10 @@ class DiscussionsController < ApplicationController
   end
 
   def set_discussion
-    @discussion = Discussion.find params[:id]
+    @discussion = if params[:id]
+      Discussion.find params[:id]
+    else
+      Discussion.new
+    end
   end
 end
