@@ -30,6 +30,17 @@
     <%= form.check_box :closed %>
   </div>
 
+  <% if @discussion.new_record? %>
+    <div class="mb-3">
+      <%= form.fields_for :posts do |p| %>
+        <%= p.rich_text_area :body, placeholder: "Kick off the discussion" %>
+        <%= p.hidden_field :user_id, value: Current.user.id %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :user_id, value: Current.user.id %>
+
   <div class="mb-3">
     <%= form.submit class: "btn btn-primary" %>
   </div>

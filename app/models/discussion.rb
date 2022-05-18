@@ -3,6 +3,8 @@ class Discussion < ApplicationRecord
   belongs_to :category, touch: true, optional: true
   has_many :posts, dependent: :destroy
 
+  accepts_nested_attributes_for :posts
+
   validates :name, presence: true
 
   scope :with_posts_count, ->{ select("*, (#{Post.where('discussion_id = posts.discussion_id').select('COUNT(*)').to_sql}) AS posts_count") }

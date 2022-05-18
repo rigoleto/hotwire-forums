@@ -1,9 +1,10 @@
 class DiscussionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_discussion, except: :index
+  before_action :set_categories
 
   def index
-    @discussions = Discussion.all.with_posts_count.order(updated_at: :desc)
+    @discussions = Discussion.all.with_posts_count.order(updated_at: :desc).includes(:category)
   end
 
   def show
@@ -12,11 +13,11 @@ class DiscussionsController < ApplicationController
   end
 
   def new
-    @categories = Category.all.sorted
+    @discussion.posts.new
   end
 
   def create
-    @discussion = Discussion.new(discussion_params.merge(user: Current.user))
+    @discussion = Discussion.new(discussion_params)
     respond_to do |format|
       if @discussion.save
         @discussion.broadcast_prepend_to("discussions")
@@ -55,7 +56,7 @@ class DiscussionsController < ApplicationController
   private
 
   def discussion_params
-    params.require(:discussion).permit(:name, :category_id, :pinned, :closed, post_attributes: :body)
+    params.require(:discussion).permit(:name, :user_id, :category_id, :pinned, :closed, posts_attributes: [:user_id, :body])
   end
 
   def set_discussion
@@ -64,5 +65,9 @@ class DiscussionsController < ApplicationController
     else
       Discussion.new
     end
+  end
+
+  def set_categories
+    @categories = Category.all.sorted.with_discussions_count
   end
 end

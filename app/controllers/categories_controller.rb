@@ -25,6 +25,7 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
+        @category.broadcast_prepend_to "categories"
         format.html { redirect_to category_url(@category), notice: "Category was successfully created." }
         format.json { render :show, status: :created, location: @category }
       else
@@ -38,6 +39,7 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update(category_params)
+        @category.broadcast_replace_to "categories"
         format.html { redirect_to category_url(@category), notice: "Category was successfully updated." }
         format.json { render :show, status: :ok, location: @category }
       else
@@ -50,7 +52,7 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1 or /categories/1.json
   def destroy
     @category.destroy
-
+    @category.broadcast_remove_to "categories"
     respond_to do |format|
       format.html { redirect_to categories_url, notice: "Category was successfully destroyed." }
       format.json { head :no_content }
