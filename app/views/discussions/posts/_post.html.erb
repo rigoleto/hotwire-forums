@@ -5,9 +5,11 @@
       <%= post.body %>
     </div>
 
-    <div class="card-footer">
-      <%= link_to "Edit", edit_discussion_post_path(post.discussion, post) %> |
-      <%= link_to "Delete", [post.discussion, post], method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } %>
-    </div>
+    <% if post.user == Current.user || Current.user.admin? %>
+      <div class="card-footer mt-2">
+        <%= link_to "Edit", edit_discussion_post_path(post.discussion, post) %> |
+        <%= link_to "Delete", [post.discussion, post], method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } %>
+      </div>
+    <% end %>
   </div>
 <% end %>
