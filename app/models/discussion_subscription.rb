@@ -11,4 +11,12 @@ class DiscussionSubscription < ApplicationRecord
   def toggle!
     update!(subscription_type: subscription_type == "opt_in" ? "opt_out" : "opt_in")
   end
+
+  def opt_in?
+    subscription_type == "opt_in"
+  end
+
+  def opt_out?
+    subscription_type == "opt_out"
+  end
 end

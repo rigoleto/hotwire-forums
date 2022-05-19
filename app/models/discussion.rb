@@ -26,16 +26,24 @@ class Discussion < ApplicationRecord
     (users + subscribers) - ignorers
   end
 
-  def subscription_for(user)
-    return nil if user.nil?
-    discussion_subscriptions.find_by(user: user)
-  end
-
   def toggle_subscription!(user)
-    if subscription = subscription_for(user)
+    if subscription = discussion_subscriptions.find_by(user: user)
       subscription.toggle!
     elsif posts.where(user: user).any?
       discussion_subscriptions.opt_out.where(user: user).create!
     end
   end
+
+  def subscribed?(user)
+    return false if user.nil?
+    subscription = discussion_subscriptions.find_by(user: user)
+    subscription ? subscription.opt_in? : posts.where(user: user).present?
+  end
+
+  def subscribed_reason(user)
+    subscription = discussion_subscriptions.opt_in.find_by(user: user)
+    subscription ? :subscribed : :posted
+  end
+
+  private
 end
