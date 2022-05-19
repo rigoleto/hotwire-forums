@@ -1,11 +1,9 @@
 <h4>Notifications</h4>
 
-<div class="mb-3">
-  <% if discussion.subscribed?(user) %>
-    You're receiving notifications on this discussion
-    <%= button_to "Unsubscribe", root_path, class: "btn btn-primary btn-sm" %>
-  <% else %>
-    You're not receiving notifications on this discussion
-    <%= button_to "Subscribe", root_path, class: "btn btn-primary btn-sm" %>
-  <% end %>
-</div>
+<% if discussion.subscribed?(user) %>
+  You're receiving notifications on this discussion
+  <%= button_to "Unsubscribe", discussion_notifications_path(@discussion), method: :post, class: "btn btn-primary btn-sm" %>
+<% else %>
+  You're not receiving notifications on this discussion
+  <%= button_to "Subscribe", discussion_notifications_path(@discussion), method: :post, class: "btn btn-primary btn-sm" %>
+<% end %>
