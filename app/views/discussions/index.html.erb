@@ -10,7 +10,7 @@
 </div>
 
 <div class="row mt-4">
-  <div class="col-3">
+  <div class="col-3 px-4">
     <%= turbo_stream_from "categories" %>
     <h5 class="pb-2 border-bottom">Categories</h5>
     <div id="categories" class="mt-3">
@@ -22,7 +22,7 @@
       <h4>Viewing discussions in <%= @category.name %></h4>
     <% end %>
     <div id="discussions">
-      <%= render partial: "discussions/discussion", collection: @discussions %>
+      <%= render(DiscussionIndexComponent.with_collection(@discussions, user: Current.user)) %>
     </div>
   </div>
 </div>

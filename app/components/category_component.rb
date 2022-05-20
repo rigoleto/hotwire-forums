@@ -12,7 +12,7 @@ class CategoryComponent < ApplicationComponent
     build_html do
       div id: dom_id(@category), class: "d-flex align-items-start justify-content-between" do
         h4 do
-          link_to @category.name, category_discussions_path(@category)
+          link_to @category.name, category_discussions_path(@category), class: "text-decoration-none text-body"
         end
         span class: "badge bg-secondary rounded-pill text-light" do
           @category.discussions_count
