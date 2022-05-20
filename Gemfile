@@ -23,6 +23,8 @@ gem 'redis', '~> 4.0'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+gem 'view_component', '~> 2.55.0'
+gem 'markaby', '~> 0.9'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap'
 

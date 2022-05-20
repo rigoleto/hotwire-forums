@@ -14,7 +14,7 @@
     <%= turbo_stream_from "categories" %>
     <h5 class="pb-2 border-bottom">Categories</h5>
     <div id="categories" class="mt-3">
-      <%= render partial: "categories/category", collection: @categories %>
+      <%= render(CategoryComponent.with_collection(@categories)) %>
     </div>
   </div>
   <div class="col">
